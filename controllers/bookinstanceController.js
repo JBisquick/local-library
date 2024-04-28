@@ -90,14 +90,33 @@ exports.bookinstance_create_post = [
   }),
 ];
 
-// Display BookInstance delete form on GET.
+// Display Book Instance delete form on GET.
 exports.bookinstance_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: BookInstance delete GET");
+  // Get details of bookinstance
+  const [bookinstance] = await Promise.all([
+    BookInstance.findById(req.params.id).exec(),
+  ]);
+
+  if (bookinstance === null) {
+    // No results.
+    res.redirect("/catalog/bookinstances");
+  }
+
+  res.render("bookinstance_delete", {
+    title: "Delete Book Inatance",
+    bookinstance: bookinstance,
+  });
 });
 
-// Handle BookInstance delete on POST.
+// Handle Book Instance delete on POST.
 exports.bookinstance_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: BookInstance delete POST");
+  // Get details of bookinstance
+  const [bookinstance] = await Promise.all([
+    BookInstance.findById(req.params.id).exec(),
+  ]);
+
+  await bookinstance.findByIdAndDelete(req.body.bookinstanceid);
+  res.redirect("/catalog/bookinstances");
 });
 
 // Display BookInstance update form on GET.
